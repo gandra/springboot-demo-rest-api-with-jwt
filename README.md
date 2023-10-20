@@ -28,7 +28,7 @@ docker exec -it <running_container_name_or_id> /bin/bash
 ### Data export with pg_dump
 
 ```
-pg_dump kikiwhitepages --host localhost --user postgres > kikiwhitepages.sql
+pg_dump sbdemoapp --host localhost --user postgres > sbdemoapp.sql
 ```
 
 ### Importing data from SQL files
