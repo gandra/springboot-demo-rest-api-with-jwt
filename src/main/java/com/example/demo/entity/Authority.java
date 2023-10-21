@@ -1,9 +1,14 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.Set;
 
+@Data
 @Entity
 @Table(name = "authorities")
 public class Authority {
@@ -13,27 +18,10 @@ public class Authority {
    @Column(unique = true)
    private String name;
 
+   @EqualsAndHashCode.Exclude
+   @ToString.Exclude
+   @JsonIgnore
    @ManyToMany(mappedBy="authorities")
    private Set<User> users;
 
-   public int getId() {
-      return id;
-   }
-
-   public void setId(int id) {
-      this.id = id;
-   }
-
-   public String getName() {
-      return name;
-   }
-
-   public void setName(String name) {
-      this.name = name;
-   }
-
-
-   public void setUsers(Set<User> users) {
-      this.users = users;
-   }
 }
