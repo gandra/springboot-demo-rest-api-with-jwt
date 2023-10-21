@@ -12,5 +12,6 @@ public class JWTAuthResponseDto {
     private String accessToken;
     private String refreshToken;
     private List<String> roles;
+    @Builder.Default
     private String tokenType = "Bearer";
 }

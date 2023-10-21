@@ -1,7 +1,10 @@
 package com.example.demo.util;
 
 
+import com.example.demo.entity.Authority;
+import com.example.demo.entity.User;
 import com.example.demo.exception.MyDemoAppException;
+import com.example.demo.security.SecurityUser;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -30,16 +33,27 @@ public class JwtUtil {
         return String.join(",", authoritiesSet);
     }
 
+    public static String populateAuthorities(Set<Authority> authorities) {
+        Set<String> authoritiesSet = new HashSet<>();
+        for (Authority authority : authorities) {
+            authoritiesSet.add(authority.getName());
+        }
+        return String.join(",", authoritiesSet);
+    }
+
+    public static String generateJwtToken(Authentication authentication, long jwtExpirationDateMinutes, String jwtSecret) {
+        return generateJwtToken(((SecurityUser)authentication.getPrincipal()).getUser(), jwtExpirationDateMinutes, jwtSecret);
+    }
     // generate JWT token
-    public static String generateJwtToken(Authentication authentication, long jwtExpirationDateMinutes, String jwtSecret){
-        String username = authentication.getName();
+    public static String generateJwtToken(User user, long jwtExpirationDateMinutes, String jwtSecret) {
+        String username = user.getEmail();
 
         Date currentDate = new Date();
         Date expireDate = new Date(currentDate.getTime() + jwtExpirationDateMinutes * 60 * 1000);
 
         String token = Jwts.builder()
             .setIssuer("My Demo App")
-            .claim("authorities", JwtUtil.populateAuthorities(authentication.getAuthorities()))
+            .claim("authorities", populateAuthorities(user.getAuthorities()))
             .setSubject(username)
             .setIssuedAt(new Date())
             .setExpiration(expireDate)
